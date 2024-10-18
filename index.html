@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" type="image/png" href="../../source/image/favicon.ico">
+    <link rel="icon" type="image/png" href="./favicon.ico">
     <style>
         html,body,a{
             position:relative;
@@ -47,7 +47,11 @@
                 font: '微软雅黑', //水印字体
                 width: 'auto', //水印宽度
                 height: 'auto', //水印长度
-                angle: -15 //水印倾斜度数
+                angle: -15, //水印倾斜度数
+
+                zIndex: 999 //水印倾斜度数
+
+                
             };
 
             //采用配置项替换默认值
@@ -56,6 +60,8 @@
             var oTemp = document.createDocumentFragment();
             var x;
             var y;
+            var page_width = Math.max(document.body.scrollWidth, document.body.clientWidth);
+            var page_height = Math.max(document.body.scrollHeight, document.body.clientHeight);
             var style = `
 
             font-family: ${defaultSettings.fontFamily};
@@ -65,22 +71,29 @@
             color: ${defaultSettings.color};
             width: ${defaultSettings.width};
             height: ${defaultSettings.height};
+            z-index: ${defaultSettings.zIndex};
             position: fixed;
             overflow: hidden;
             text-align: center;
             display: inline-block;
             white-space: nowrap;
-            z-index: 9999;
             user-select: none;
     `;
             for (var i = 0; i < defaultSettings.rows; i++) {
-                y = defaultSettings.y + (defaultSettings.y_space) *
-                    i;
+                y = defaultSettings.y + (defaultSettings.y_space) * i;
+
+                
+                if (y > page_height) {
+                    // 超出屏幕的不渲染
+                    break;
+                }
                 for (var j = 0; j < defaultSettings.cols; j++) {
-                    x = defaultSettings.x + (defaultSettings
-                        .x_space) * j;
+                    x = defaultSettings.x + (defaultSettings.x_space) * j;
 
-
+                    if (x > page_width) {
+                        // 超出屏幕的不渲染
+                        break;
+                    }
                     var mask_div = document.createElement('div');
                     mask_div.id = 'mask_div' + i + j;
                     mask_div.innerHTML = defaultSettings.txt;
