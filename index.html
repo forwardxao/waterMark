@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>mytool.xyz 原生js生成水印</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" type="image/png" href="../../source/image/favicon.ico">
+    <style>
+        html,body,a{
+            position:relative;
+            height:100%;
+            width:100%;
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+
+
+        }
+    </style>
+</head>
+<body>
+    <a style="display:flex;align-items:center;justify-content:center;height:100%;" href="http://www.mytool.xyz" target="_blank">由 mytool.xyz 优化代码</a>
+    <script type="text/javascript" >
+
+        waterMark({
+            txt:`mytool.xyz:机密文集,请勿泄密<br>水印提示`
+        })
+        function waterMark(param) {
+            //默认设置
+            var defaultSettings = {
+                txt: "",
+                x: 20, //水印起始位置x轴坐标
+                y: 70, //水印起始位置Y轴坐标
+                rows: 10, //水印行数
+                cols: 10, //水印列数
+                x_space: 350, //水印x轴间隔
+                y_space: 260, //水印y轴间隔
+                color: '#999999', //水印字体颜色
+                alpha: 0.5, //水印透明度
+                fontsize: '14px', //水印字体大小
+                font: '微软雅黑', //水印字体
+                width: 'auto', //水印宽度
+                height: 'auto', //水印长度
+                angle: -15 //水印倾斜度数
+            };
+
+            //采用配置项替换默认值
+            Object.assign(defaultSettings,param)
+
+            var oTemp = document.createDocumentFragment();
+            var x;
+            var y;
+            var style = `
+
+            font-family: ${defaultSettings.fontFamily};
+            transform: rotate(${defaultSettings.angle}deg);
+            opacity: ${defaultSettings.alpha};
+            font-size: ${defaultSettings.fontsize};
+            color: ${defaultSettings.color};
+            width: ${defaultSettings.width};
+            height: ${defaultSettings.height};
+            position: fixed;
+            overflow: hidden;
+            text-align: center;
+            display: inline-block;
+            white-space: nowrap;
+            z-index: 9999;
+            user-select: none;
+    `;
+            for (var i = 0; i < defaultSettings.rows; i++) {
+                y = defaultSettings.y + (defaultSettings.y_space) *
+                    i;
+                for (var j = 0; j < defaultSettings.cols; j++) {
+                    x = defaultSettings.x + (defaultSettings
+                        .x_space) * j;
+
+
+                    var mask_div = document.createElement('div');
+                    mask_div.id = 'mask_div' + i + j;
+                    mask_div.innerHTML = defaultSettings.txt;
+                    mask_div.style = style;
+                    mask_div.style.left = x + 'px';
+                    mask_div.style.top = y + 'px';
+                    oTemp.appendChild(mask_div);
+                };
+            };
+            document.body.appendChild(oTemp);
+        }
+
+
+    </script>
+</body>
+</html>
